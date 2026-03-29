@@ -1,0 +1,36 @@
+name: Generate Research PDF
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - docs/research/**
+
+permissions:
+  contents: read
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    env:
+      PDF_INPUT_FILE: docs/research/DOMAIN_SPECIFIC_COMPILATION.md
+      PDF_OUTPUT_FILE: docs/pdfs/DOMAIN_SPECIFIC_COMPILATION.pdf
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Pandoc and LaTeX dependencies
+        run: bash scripts/docs/install-pandoc.sh
+
+      - name: Generate PDF
+        run: bash scripts/docs/generate-pdf.sh
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: domain-specific-compilation-research-pdf
+          path: docs/pdfs/DOMAIN_SPECIFIC_COMPILATION.pdf
+          if-no-files-found: error

@@ -1,0 +1,24 @@
+#cloud-config
+package_update: true
+packages: [git, gcc, gcc-c++, make, python3-pip]
+write_files:
+  - path: /usr/local/bin/rehydrate-spdk.sh
+    permissions: '0755'
+    content: |
+      #!/bin/bash
+      echo 1024 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+      if [ -d "/home/ec2-user/project/spdk" ]; then
+        cd /home/ec2-user/project/spdk && ./scripts/setup.sh
+      fi
+  - path: /etc/systemd/system/spdk-dev.service
+    content: |
+      [Unit]
+      Description=SPDK Rehydration
+      After=network.target
+      [Service]
+      Type=oneshot
+      ExecStart=/usr/local/bin/rehydrate-spdk.sh
+      [Install]
+      WantedBy=multi-user.target
+runcmd:
+  - systemctl enable --now spdk-dev.service
