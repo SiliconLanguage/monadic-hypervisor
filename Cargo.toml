@@ -1,0 +1,26 @@
+[package]
+name = "monadic-hypervisor"
+version = "0.1.0"
+edition = "2021"
+authors = ["SiliconLanguage <engineering@siliconlanguage.dev>"]
+description = "Bare-metal EL2 hypervisor — zero kernel tax, zero copy, hardware-enlightened"
+license = "MIT"
+
+# ── no_std enforcement ───────────────────────────────────────────────
+# The hypervisor runs on `aarch64-unknown-none` (bare metal, no OS).
+# This target has no `std` support — any `use std::*` is a compile
+# error.  ADR-001 compliance is enforced at the toolchain level.
+
+[profile.release]
+# Optimise for size + speed.  LTO across the entire crate graph
+# eliminates dead code and enables cross-module inlining of
+# Stage-2 descriptor constructors and HAL register accessors.
+opt-level = "z"          # Optimise for binary size (important for UEFI payload)
+lto = true               # Full link-time optimisation
+codegen-units = 1        # Single CGU for maximum LTO effectiveness
+panic = "abort"          # No unwinding — our #[panic_handler] is diverging (-> !)
+strip = "symbols"        # Strip symbols from release binary (debug via separate ELF)
+overflow-checks = false  # Disable in release — checked manually in critical paths
+
+[profile.dev]
+panic = "abort"          # Must match release — no unwinding support at EL2

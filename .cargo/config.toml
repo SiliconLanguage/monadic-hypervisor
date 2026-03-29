@@ -1,0 +1,26 @@
+# .cargo/config.toml — Monadic Hypervisor Build Configuration
+#
+# Sets the default compilation target to bare-metal AArch64 and
+# passes the custom linker script so the ELF memory layout matches
+# QEMU virt / Graviton hardware expectations.
+#
+# ADR-001 compliance: `aarch64-unknown-none` has no `std` support —
+# any `use std::*` is a hard compile error at the toolchain level.
+
+[build]
+# Default target: bare-metal AArch64 (no OS, no std).
+# This is the target used by `cargo build` when no --target is given.
+target = "aarch64-unknown-none"
+
+[target.aarch64-unknown-none]
+# Use the rust-lld linker (bundled with rustup) — no external
+# toolchain dependency for linking.
+rustflags = [
+    # ── Linker Script ────────────────────────────────────────────────
+    # Pass our custom linker.ld to lld.  This controls:
+    #   - ENTRY(_start) — ELF entry point = boot.S reset vector
+    #   - ORIGIN = 0x4000_0000 — QEMU virt DRAM base
+    #   - Section ordering: .text.boot first, then .text, .rodata, .data, .bss
+    #   - __stack_top symbol for boot.S SP initialisation
+    "-C", "link-arg=-Tlinker.ld",
+]
