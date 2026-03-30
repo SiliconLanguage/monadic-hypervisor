@@ -1,6 +1,6 @@
 # **The Evolution of Cloud Hypervisor Architectures and Kernel-Bypass I/O: Toward a Monadic Infrastructure Paradigm**
 
-## ---
+---
 
 ## **Introduction to the Infrastructure Bottleneck and the Monadic Vision**
 
