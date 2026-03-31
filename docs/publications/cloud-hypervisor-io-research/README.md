@@ -1,13 +1,11 @@
-# **The Evolution of Cloud Hypervisor Architectures and Kernel-Bypass I/O: Toward a Monadic Infrastructure Paradigm**
+# The Evolution of Cloud Hypervisor Architectures and Kernel-Bypass I/O: Toward a Monadic Infrastructure Paradigm
 
----
+**Introduction to the Infrastructure Bottleneck and the Monadic Vision**
+ 
+ **Author:** Ping Long, Principal Systems Architect, Lead Researcher, SiliconLanguage Foundry
 
-## **Introduction to the Infrastructure Bottleneck and the Monadic Vision**
-
-Author: Ping Long, Principal Systems Architect, Lead Researcher, SiliconLanguage Foundry
-
-*Contact: [LinkedIn](https://www.linkedin.com/in/pinglong) | [GitHub](https://github.com/ping-long-github) | plongpingl@gmail.com*
-
+ *Contact: [LinkedIn](https://www.linkedin.com/in/pinglong) | [GitHub](https://github.com/ping-long-github) | plongpingl@gmail.com*
+ 
 ---
 
 The architectural foundations of modern data centers are undergoing a profound and necessary structural metamorphosis. This transformation is driven by the exponential growth of network data rates, the continuous proliferation of specialized hardware accelerators, and the rigid performance demands of hyperscale, cloud-native workloads. The advent of Peripheral Component Interconnect Express (PCIe) 5.0 hardware has fundamentally altered the performance landscape. Modern infrastructure components, including Non-Volatile Memory Express (NVMe) solid-state drives such as the Kioxia CM7-R, are now capable of sustaining upwards of 2.45 million Input/Output Operations Per Second (IOPS), while next-generation Network Interface Cards (NICs), such as the ConnectX-7, routinely push 400 gigabits per second (Gb/s) of throughput.1 Despite these hardware advancements, conventional operating system kernel-based I/O interfaces and legacy hypervisor virtualization stacks incur prohibitive systemic overheads.1 Legacy software architectures suffer from excessive system-call transitions, context-switching penalties, and internal lock contention, consuming a massive fraction of host Central Processing Unit (CPU) cycles simply to facilitate data movement, without actually saturating the physical devices.1
